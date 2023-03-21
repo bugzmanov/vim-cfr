@@ -31,12 +31,14 @@ function! s:decompile(class) abort
   endif
 
   setlocal bufhidden=hide noswapfile filetype=java modifiable
-  " let command = printf('java -jar %s %s', s:jar, a:class)
   let lines = systemlist(command)
   if v:shell_error
     echoerr printf('Failed to run %s (%d)', command, v:shell_error)
     return
   endif
+
+  echo command
+  echo lines
 
   normal! gg"_dG
   call setline(1, lines)
