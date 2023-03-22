@@ -37,12 +37,13 @@ function! s:decompile(class) abort
     return
   endif
 
-  echo command
-  echo lines
-
   normal! gg"_dG
   call setline(1, lines)
   setlocal nomodifiable
+endfunction
+
+function! s:undoAll() abort
+    silent exe "u0"
 endfunction
 
 function! s:nope()
@@ -52,5 +53,7 @@ endfunction
 augroup vim-cfr
   autocmd!
   autocmd BufReadCmd *.class call <sid>decompile(expand('<afile>'))
+  autocmd BufEnter zipfile://*.class call <sid>decompile(expand('<afile>'))
+  autocmd BufLeave zipfile://*.class call <sid>undoAll()
   autocmd BufWriteCmd *.class call <sid>nope()
 augroup END
